@@ -1,16 +1,23 @@
 package com.github.nnnnusui.computersystem
 
-object BooleanGateTest extends Tester {
-  def main(args: Array[String]): Unit = {
-    test()
-  }
+import com.github.nnnnusui.computersystem.BooleanGate._
+import org.scalatest.{Matchers, WordSpec}
 
-  import BooleanGate._
-  override def test(): Unit = {
-    println("NAND ->")
-    println(s"\t0 | 0 | ${nand(false, false)}")
-    println(s"\t0 | 1 | ${nand(false, true )}")
-    println(s"\t1 | 0 | ${nand(true , false)}")
-    println(s"\t1 | 1 | ${nand(true , true )}")
+class BooleanGateTest extends WordSpec with Matchers {
+
+  "nand()" in
+    getBoolArgsPattern(2).zip(Seq(true, true, true ,false))
+      .foreach{case (it, r)=>
+        assert(nand(it(0), it(1)) == r, s": nand(${it(0)}, ${it(1)}) should be $r")
+      }
+
+
+  def getBoolArgsPattern(argumentLength: Int): Seq[Seq[Boolean]] ={
+    val maxIndex = scala.math.pow(2.0, argumentLength).toInt - 1
+    (0 to maxIndex).map{ index =>
+      index.toBinaryString
+        .reverse.padTo(argumentLength, '0').reverse.toCharArray
+        .map(bit=> bit == '1')
+    }
   }
 }
