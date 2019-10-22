@@ -9,5 +9,8 @@ object BooleanGate {
   def and(_1: Boolean, _2: Boolean): Boolean
     = not(nand(_1, _2))
   def or(_1: Boolean, _2: Boolean): Boolean
+    = nand(not(_1), not(_2))
+
+  def xor(_1: Boolean, _2: Boolean): Boolean
     = nand(nand(not(_1), _2), nand(_1, not(_2)))
 }

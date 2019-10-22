@@ -4,27 +4,29 @@ import org.scalatest.{Matchers, WordSpec}
 
 class BooleanGateTest extends WordSpec with Matchers {
 
-  val nandTest = boolTest("nand", (name, pattern, answer)=> (
-      BooleanGate.nand(pattern(0), pattern(1))
-     ,s": $name(${pattern(0)}, ${pattern(1)}) should be $answer"
-    ), _)
-  val notTest = boolTest("not", (name, pattern, answer)=> (
-     BooleanGate.not(pattern(0))
-    ,s": $name(${pattern(0)}) should be $answer"
-   ), _)
-  val andTest = boolTest("and", (name, pattern, answer)=> (
-      BooleanGate.and(pattern(0), pattern(1))
-     ,s": $name(${pattern(0)}, ${pattern(1)}) should be $answer"
-    ), _)
-  val orTest = boolTest("or", (name, pattern, answer)=> (
-    BooleanGate.or(pattern(0), pattern(1))
-    ,s": $name(${pattern(0)}, ${pattern(1)}) should be $answer"
-  ), _)
+  def bool1Test(function: (Boolean) => Boolean)
+    = boolTest(_, (name, pattern, answer)=> (
+        function(pattern(0))
+        ,s": $name(${pattern(0)}) should be $answer"
+      ), _)
+  def bool2Test(function: (Boolean, Boolean) => Boolean)
+    = boolTest(_, (name, pattern, answer)=> (
+        function(pattern(0), pattern(1))
+        ,s": $name(${pattern(0)}, ${pattern(1)}) should be $answer"
+      ), _)
+
+  val nandTest = bool2Test(BooleanGate.nand)("nand", _)
+  val notTest = bool1Test(BooleanGate.not)("not", _)
+  val andTest = bool2Test(BooleanGate.and)("and", _)
+  val orTest  = bool2Test(BooleanGate.or)("or", _)
+  val xorTest = bool2Test(BooleanGate.xor)("xor", _)
 
   nandTest(Seq(true, true, true ,false)).println()
   notTest(Seq(true, false)).println()
   andTest(Seq(false, false, false, true)).println()
-  orTest(Seq(false, true, true, false)).println()
+  orTest(Seq(false, true, true, true)).println()
+
+  xorTest(Seq(false, true, true, false)).println()
 
 
 
