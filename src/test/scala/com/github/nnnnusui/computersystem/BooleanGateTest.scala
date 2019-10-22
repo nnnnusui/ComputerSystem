@@ -25,9 +25,22 @@ class BooleanGateTest extends WordSpec with Matchers {
   notTest(Seq(true, false)).println()
   andTest(Seq(false, false, false, true)).println()
   orTest(Seq(false, true, true, true)).println()
-
   xorTest(Seq(false, true, true, false)).println()
 
+  val muxTest = boolTest("mux", (name, pattern, answer)=> (
+      BooleanGate.mux(pattern(0), pattern(1), pattern(2))
+      ,s": $name(${pattern(0)}, ${pattern(1)}, ${pattern(2)}) should be $answer"
+    ), _)
+  muxTest(Seq(false, false, false, true, true, false, true, true)).println()
+
+  println(("mux" ::
+    getBoolArgsPattern(2)
+      .map { it =>
+        val result = BooleanGate.dmux(it(0), it(1))
+        val row = it.map(it => if (it) 1 else 0).mkString(" | ")
+        s"\t$row | $result"
+      }.toList
+    ).mkString("\n"))
 
 
 
