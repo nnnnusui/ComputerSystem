@@ -18,3 +18,7 @@ object BooleanGate {
   def dmux(_1: Boolean, select: Boolean): (Boolean, Boolean)
     = (and(_1, not(select)), and(_1, select))
 }
+//object MultiInputBooleanGate{
+//  def or(inputs: Boolean*): Boolean
+//    = inputs.foldLeft(false)((before, current)=> BooleanGate.or(before, current))
+//}
